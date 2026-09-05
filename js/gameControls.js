@@ -236,5 +236,35 @@ export function resetAllRatings() {
 }
 
 export function resetAllProgress() {
+    resetAllRatings();
+    gamesPool.forEach((game)=>{
+        game.hoursPlayed = 0;
+        game.completed = false;
+    })
+    return gamesPool;
+}
 
+export function getCompletedGamesByGenre(genre) {
+    return gamesPool.filter((game)=> game.genre === genre && game.completed);
+}
+
+export function getCompletedGamesCountByGenre(genre) {
+    return getCompletedGamesByGenre(genre).length;
+}
+
+export function getUncompletedGamesByGenre(genre) {
+    return gamesPool.filter((game)=> game.genre === genre && !game.completed);
+}
+
+export function getUncompletedGamesByGenreCount(genre) {
+    return getUncompletedGamesByGenre(genre).length;
+}
+
+export function getGenreCompletionRate(genre) {
+    const gamesByGenre = getGamesByGenre(genre);
+    if (gamesByGenre.length === 0) {
+        return 0;
+    }
+    const completedGamesCount = gamesByGenre.filter(game=>game.completed).length 
+    return Number(((completedGamesCount / gamesByGenre.length) * 100).toFixed(0));
 }

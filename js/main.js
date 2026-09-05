@@ -29,6 +29,7 @@ import {
     removeGamesByGenre,
     removeCompletedGames,
     resetAllRatings,
+    resetAllProgress,
 } from "./gameControls.js";
 
 
@@ -132,7 +133,8 @@ console.log(getGamesByCompletionAndRating("sus", 10));
 // console.log(removeGamesByGenre("Action RPG"));
 // console.log(removeCompletedGames());
 
-console.log(resetAllRatings());
+// console.log(resetAllRatings());
+console.log(resetAllProgress());
 // // ==============================
 // // FIND
 // // ==============================
