@@ -1,4 +1,4 @@
-import Game from "./modules/game.js";
+import Game from "./models/Game.js";
 
 export const gamesPool = [];
 

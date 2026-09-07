@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Gothic",
+    "genre": "RPG",
+    "hoursPlayed": 62,
+    "completed": true,
+    "rating": 10
+  },
+  {
+    "id": 2,
+    "title": "Dark Souls",
+    "genre": "Action RPG",
+    "hoursPlayed": 145,
+    "completed": true,
+    "rating": 10
+  },
+  {
+    "id": 3,
+    "title": "Resident Evil 4",
+    "genre": "Survival Horror",
+    "hoursPlayed": 38,
+    "completed": true,
+    "rating": 9
+  },
+  {
+    "id": 4,
+    "title": "Valorant",
+    "genre": "Shooter",
+    "hoursPlayed": 1500,
+    "completed": false,
+    "rating": 8
+  },
+  {
+    "id": 5,
+    "title": "Signalis",
+    "genre": "Survival Horror",
+    "hoursPlayed": 24,
+    "completed": true,
+    "rating": 9
+  },
+  {
+    "id": 6,
+    "title": "Elden Ring",
+    "genre": "Action RPG",
+    "hoursPlayed": 214,
+    "completed": true,
+    "rating": 10
+  },
+  {
+    "id": 7,
+    "title": "Cyberpunk 2077",
+    "genre": "RPG",
+    "hoursPlayed": 91,
+    "completed": true,
+    "rating": 9
+  },
+  {
+    "id": 8,
+    "title": "Silent Hill 2",
+    "genre": "Survival Horror",
+    "hoursPlayed": 19,
+    "completed": false,
+    "rating": 9
+  },
+  {
+    "id": 9,
+    "title": "Half-Life 2",
+    "genre": "Shooter",
+    "hoursPlayed": 21,
+    "completed": true,
+    "rating": 10
+  },
+  {
+    "id": 10,
+    "title": "The Witcher 3",
+    "genre": "RPG",
+    "hoursPlayed": 176,
+    "completed": true,
+    "rating": 10
+  }
+]
