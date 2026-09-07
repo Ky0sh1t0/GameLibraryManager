@@ -30,6 +30,9 @@ import {
     removeCompletedGames,
     resetAllRatings,
     resetAllProgress,
+    cloneGame,
+    updateGame,
+    mergeGames,
 } from "./gameControls.js";
 
 
@@ -88,7 +91,7 @@ const eldenRing = new Game(
 );
 
 const residentEvil2 = new Game(
-    3,
+    7,
     "Resident Evil 9: Requiem",
     "Survival Horror",
     35,
@@ -96,6 +99,61 @@ const residentEvil2 = new Game(
     9
 );
 
+const newGames = [
+    new Game(
+        100,
+        "Gothic",
+        "RPG",
+        60,
+        true,
+        10
+    ),
+
+    new Game(
+        101,
+        "Cyberpunk 2077",
+        "RPG",
+        85,
+        true,
+        9
+    ),
+
+    new Game(
+        102,
+        "Dark Souls",
+        "Action RPG",
+        150,
+        true,
+        10
+    ),
+
+    new Game(
+        103,
+        "Silent Hill 2",
+        "Survival Horror",
+        18,
+        false,
+        9
+    ),
+
+    new Game(
+        104,
+        "Half-Life 2",
+        "Shooter",
+        22,
+        true,
+        10
+    ),
+
+    new Game(
+        105,
+        "SIGNALIS",
+        "Survival Horror",
+        30,
+        true,
+        10
+    )
+];
 
 // // ==============================
 // // ADD
@@ -116,25 +174,37 @@ addGamesToPool(
 console.log(gamesPool);
 
 
-console.log(searchGames("Resident"))
-console.log(sortGamesByRating());
-console.log(sortGamesByHoursPlayed());
-console.log(getTopRatedGames(2));
-console.log(getGamesStatistics());
+console.log(cloneGame(2));
 
-console.log(groupGamesByGenre());
-console.log(getGenreStatistic());
-console.log(getCompletionRate());
-console.log(getUnfinishedGames());
-console.log(getGamesByPlaytimeRange(35, 200));
-console.log(getGamesByCompletionAndRating(true, 10));
-console.log(getGamesByCompletionAndRating("sus", 10));
 
-// console.log(removeGamesByGenre("Action RPG"));
-// console.log(removeCompletedGames());
+console.log(updateGame(2, {
+    rating: 4,
+    completed: true
+}))
 
-// console.log(resetAllRatings());
-console.log(resetAllProgress());
+console.log(mergeGames(newGames));
+// console.log(searchGames("Resident"))
+// console.log(sortGamesByRating());
+// console.log(sortGamesByHoursPlayed());
+// console.log(getTopRatedGames(2));
+// console.log(getGamesStatistics());
+
+// console.log(groupGamesByGenre());
+// console.log(getGenreStatistic());
+// console.log(getCompletionRate());
+// console.log(getUnfinishedGames());
+// console.log(getGamesByPlaytimeRange(35, 200));
+// console.log(getGamesByCompletionAndRating(true, 10));
+// console.log(getGamesByCompletionAndRating("sus", 10));
+
+// // console.log(removeGamesByGenre("Action RPG"));
+// // console.log(removeCompletedGames());
+
+// // console.log(resetAllRatings());
+// console.log(resetAllProgress());
+
+
+//
 // // ==============================
 // // FIND
 // // ==============================

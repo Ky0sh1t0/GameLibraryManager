@@ -1,8 +1,11 @@
+import Game from "./modules/game.js";
+
 export const gamesPool = [];
+
+
 export function addGamesToPool(...games) {
     gamesPool.push(...games);
 }
-
 
 export function deleteGameFromPool(id) {
     const gameIndex = gamesPool.findIndex(game=>game.id === id);
@@ -267,4 +270,110 @@ export function getGenreCompletionRate(genre) {
     }
     const completedGamesCount = gamesByGenre.filter(game=>game.completed).length 
     return Number(((completedGamesCount / gamesByGenre.length) * 100).toFixed(0));
+}
+
+// block 2
+
+export function cloneGame(id) {
+    const game = findGameById(id);
+    if (game === null) {
+        return null;
+    }
+
+    const maxId = gamesPool.reduce((acc, game)=>acc >= game.id ? acc : game.id, 0);
+
+    const clonedGame = new Game(
+        maxId + 1,
+        game.title,
+        game.genre,
+        game.hoursPlayed,
+        game.completed,
+        game.rating
+    )
+
+    return clonedGame;
+}
+
+export function hasDuplicateGame(title) {
+    return gamesPool.some((game)=>game.title.toLowerCase() === title.toLowerCase());
+}
+
+export function addGameIfNotDuplicate(game) {
+    if (!hasDuplicateGame(game.title)) {
+        gamesPool.push(game);
+        return true;
+    }
+
+    return false;
+}
+
+export function updateGame(id, updates) {
+    const game = findGameById(id);
+    if (!game) {
+        return false;
+    }
+
+    if ((updates?.rating > 10 || updates?.rating < 0 || !Number.isFinite(updates?.rating)) && updates?.rating !== undefined) {
+        throw new Error("Not valid value for rating");
+    }
+
+    if ((updates?.hoursPlayed < 0 || !Number.isFinite(updates?.hoursPlayed))&& updates?.hoursPlayed !== undefined) {
+        throw new Error("Not valid value for playing hours")
+    }
+
+    if (typeof updates?.completed !== "boolean" && updates?.completed !== undefined) {
+        throw new Error("Not valid value")
+    }
+
+    game.title = updates?.title !== undefined ? updates.title : game.title;
+    game.genre = updates?.genre !== undefined ? updates.genre : game.genre;
+    game.hoursPlayed = updates?.hoursPlayed !== undefined ? updates.hoursPlayed : game.hoursPlayed;
+    game.completed = updates?.completed !== undefined ? updates.completed : game.completed;
+    game.rating = updates?.rating !== undefined ? updates.rating : game.rating;
+
+    return game;
+}
+
+export function bulkUpdateGames(ids, updates) {
+    ids.forEach((id)=>{
+        updateGame(id, updates);
+    })
+
+    return gamesPool;
+}
+
+export function removeGamesByIds(ids) {
+    ids.forEach((id)=>{
+        deleteGameFromPool(id);
+    })
+
+    return gamesPool
+}
+
+export function getGamesByIds(ids) {
+    const gamePoolByIds = [];
+    ids.forEach((id)=>{
+        let game = findGameById(id);
+        if (!game) {
+            return ;
+        }
+        gamePoolByIds.push(game);
+
+    })
+    return gamePoolByIds;
+}
+
+export function getExistingGameIds() {
+    const idsPool = gamesPool.map((game)=>game.id);
+    return idsPool;
+}
+
+export function mergeGames(newGames) {
+    newGames.forEach((game)=>{
+        if (!hasDuplicateGame(game.title)) {
+            gamesPool.push(game);
+        }
+    })
+
+    return gamesPool;
 }
