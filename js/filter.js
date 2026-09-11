@@ -1,6 +1,19 @@
-import { genresEl } from "./dom.js";
-import { gamesPool, groupGamesByGenre, searchGames } from "./gameControls.js";
-import { renderGames } from "./gameRender.js";
+import { 
+    searchEl,
+    genresEl,
+    sortEl,
+    completionEl,
+} from "./dom.js";
+
+import { 
+    gamesPool,
+    groupGamesByGenre, 
+    searchGames 
+} from "./gameControls.js";
+
+import {
+    renderGames 
+} from "./gameRender.js";
 
 // setters for filter
 let searchFilter = "";
@@ -9,22 +22,22 @@ let sortFilters = "Name";
 let completionFilter = "allGames";
 
 
-export function setSearchFilter(e) {
+function setSearchFilter(e) {
     searchFilter = e.target.value.trim();
     applyFilter();
 }
 
-export function setGenresFilter(e) {
+function setGenresFilter(e) {
     genresFilter = e.target.value;
     applyFilter();
 }
 
-export function setSortFilter(e) {
+function setSortFilter(e) {
     sortFilters = e.target.value;
     applyFilter();
 }
 
-export function setCompletionFilter(e) {
+function setCompletionFilter(e) {
     completionFilter = e.target.value;
     applyFilter();
 }
@@ -91,4 +104,12 @@ export function applyFilter() {
     }
 
     renderGames(filteredGames);
+}
+
+export function bindFilterEvents() {
+    //sort
+    searchEl.addEventListener("input", setSearchFilter);
+    genresEl.addEventListener("change", setGenresFilter);
+    sortEl.addEventListener("change", setSortFilter);
+    completionEl.addEventListener("change", setCompletionFilter);
 }
