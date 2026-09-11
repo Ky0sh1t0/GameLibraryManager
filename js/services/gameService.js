@@ -4,7 +4,7 @@ export async function loadGamesFromJSON() {
     try {
         const res = await fetch("./data/games.json");
         if (!res.ok) {
-            throw new Error(`Loaded with an error http:${res.status}`)
+            throw new Error(`Failed to load games. Please try again`)
         }
 
         const data = await res.json();

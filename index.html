@@ -4,9 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Library</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/game-library-style.css">
 </head>
 <body>
+    <div class="app">
+        <header class="app-header">
+            <div class="app-header__info">
+                <h1 class="app-title">Game Library Manager</h1>
+                <p class="app-subtitle">Track your library progress</p>
+            </div>
+        </header>
+        
+        <div class="toolbar">
+            <div class="search-wrapper">
+                <span class="icon-wrap" data-icon="search"></span>
+                <input class="search-input" value="" placeholder="search games..."/>
+            </div>
+            <select class="select select-genres" name="" id="">
+                <option value="allGenres">All Genres</option>
+            </select>
+            <select class="select select-sort" name="" id="">
+                <option value="Name">Sort by: Name</option>
+                <option value="Completion">Sort by: Completion</option>
+                <option value="Hours">Sort by: Hours</option>
+                <option value="Rating">Sort by: Rating</option>
+            </select>
+            <select class="select select-completion" name="" id="">
+                <option value="allGames">All Games</option>
+                <option value="completed">Completed</option>
+                <option value="notCompleted">Not Completed</option>
+            </select>
+            <button class="btn btn-primary btn-add">+ Add Game</button>
+        </div>
+        
+        <section class="stats-grid"></section>
+
+        <div class="game-form-cont">
+            <form class="game-form">
+                <div class="game-input-wrapper">
+                    <label for="title" class="game-label-input">Название</label>
+                    <input id="title" name="title" class="game-input" value=""/>
+                </div>
+
+                <div class="game-input-wrapper">
+                    <label for="genre" class="game-label-input">Жанр</label>
+                    <input id="genre" name="genre" class="game-input" value=""/>
+                </div>
+
+                <div class="game-input-wrapper">
+                    <label for="hoursPlayed" class="game-label-input">Кол-во часов</label>
+                    <input id="hoursPlayed" name="hoursPlayed" class="game-input" value=""/>
+                </div>
+
+                <div class="game-input-wrapper">
+                    <label for="completed" class="game-label-input">Пройдена/Не пройдена</label>
+                    <input id="completed" type="checkbox" name="completed" class="game-input"/>
+                </div>
+            
+                <div class="game-input-wrapper">
+                    <label for="rating" class="game-label-input">Рейтинг</label>
+                    <input id="rating" name="rating" type="number" min="0" max="10" class="game-input" value=""/>
+                </div>
+                
+                <button class="btn btn-submit" type="submit">Подтвердить</button>
+            </form>
+
+            <p class="form-error none"></p>
+        </div>
+
+        <section class="game-section">
+            <div class="games-section-header">
+                <h2 class="game-section-title">Games</h2>
+                <p class="games-count"> <span></span> games found</p>
+            </div>
+            <div class="games-grid"></div>
+        </section>
+    </div>
     <script type="module" src="./js/main.js"></script>
 </body>
 </html>

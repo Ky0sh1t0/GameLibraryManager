@@ -112,8 +112,6 @@ export function getGamesGenreCount() {
         }
     })
 
-    console.log(counter);
-
     return Object.keys(counter).reduce((a,b)=>counter[a]>counter[b] ? a : b);
 } 
 
@@ -295,7 +293,11 @@ export function cloneGame(id) {
 }
 
 export function hasDuplicateGame(title) {
-    return gamesPool.some((game)=>game.title.toLowerCase() === title.toLowerCase());
+    return gamesPool.some((game)=>game.title.toLowerCase().trim() === title.toLowerCase().trim());
+}
+
+export function hasDuplicateGameSameId(gameId, title) {
+    return gamesPool.some((game)=>game.title.toLowerCase().trim()===title.toLowerCase().trim() && game.id !== gameId);
 }
 
 export function addGameIfNotDuplicate(game) {
