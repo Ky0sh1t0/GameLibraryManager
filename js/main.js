@@ -1,8 +1,6 @@
 import { 
     addGamesToPool,
-    deleteGameFromPool, 
     gamesPool, 
-    toggleGameCompleted 
 } from "./gameControls.js";
 
 import {
@@ -19,22 +17,22 @@ import {
     renderError,
 } from "./gameRender.js";
 
-import {
-    cardsCont,
-} from "./dom.js"
-
 import { 
     applyFilter, 
     renderGenresFilters,
     bindFilterEvents,
 } from "./filter.js";
 
-
 import {
-    editGame,
     bindFormEvents,
 } from "./form.js"
 
+import {
+    bindGameCardActions,
+} from "./gameActions.js"
+
+
+// data
 async function loadGamesIntoPool() {
     const games = await loadGamesFromJSON();
     addGamesToPool(...games);
@@ -71,58 +69,12 @@ function importGamesFromJSONString(jsonString) {
     replaceGames(games);
 }
 
-// Part 4
-
-
-// filter
-
-function deleteGame(id) {
-    deleteGameFromPool(id);
-    renderStatistics();
-    renderGenresFilters();
-    applyFilter();
-}
-
-
-function toggleGameCompletion(gameId) {
-    toggleGameCompleted(gameId);
-    renderStatistics();
-    applyFilter();
-}
-
-// form 
-
-
-function actionsWithGameCard(e) {
-    const deleteBtn = e.target.closest(".btn-danger");
-    const editBtn = e.target.closest(".btn-edit");
-    const completeBtn = e.target.closest(".badge");
-    if (!deleteBtn && !editBtn && !completeBtn) {
-        return ;
-    }
-
-    const card = e.target.closest(".game-card");
-
-    if (!card) {
-        return ;
-    }
-
-    let cardGameId = Number(card.dataset.gameId);
-
-    if (deleteBtn) {
-        deleteGame(cardGameId);
-    } else if (editBtn) {
-        editGame(cardGameId);
-    } else if (completeBtn) {
-        toggleGameCompletion(cardGameId);
-    }
-}
+// Events and initialise
 
 function bindEvents() {
     bindFormEvents();
     bindFilterEvents();
-    // actions with game
-    cardsCont.addEventListener('click', actionsWithGameCard);
+    bindGameCardActions();
 }
 
 async function initialiseApp() {
