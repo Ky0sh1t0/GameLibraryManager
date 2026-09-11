@@ -6,7 +6,36 @@ import {
     validateGamesData,
 } from "./services/gameService.js"
 
-import { icons } from "./icons.js";
+
+import {
+    renderGames,
+    renderStatistics,
+    renderIcons,
+    renderLoading,
+    renderError,
+} from "./gameRender.js";
+
+import {
+    cardsCont,
+
+    formCont,
+    form,
+    titleInput,
+    genreInput,
+    hoursPlayedInput,
+    completedCheckbox,
+    ratingInput,
+
+    addBtnEl,
+
+    searchEl,
+    genresEl,
+    sortEl,
+    completionEl,
+
+    errorMsgEl,
+} from "./dom.js"
+
 import Game from "./models/Game.js";
 
 async function loadGamesIntoPool() {
@@ -47,130 +76,7 @@ function importGamesFromJSONString(jsonString) {
 
 // Part 4
 
-const cardsCont = document.querySelector(".games-grid");
-
-function renderLoading() {
-    cardsCont.innerHTML = "";
-    const loadingEl = document.createElement("div");
-    loadingEl.className = "loading-state";
-    loadingEl.textContent = "Loading games..."
-    cardsCont.appendChild(loadingEl);
-}
-
-function renderGames(games) {
-    const gamesCount = document.querySelector(".games-count span");
-
-    gamesCount.innerText = `${games.length}`
-
-    cardsCont.innerHTML = "";
-
-    let emptyNotif = document.createElement("div");
-    if (gamesPool.length === 0) {
-        emptyNotif.className = "games-empty";
-        emptyNotif.innerText = "Library empty"
-        cardsCont.appendChild(emptyNotif);
-    } else if (games.length === 0) {
-        emptyNotif.className = "games-filter-empty";
-        emptyNotif.innerText = "Games not found by filter";
-        cardsCont.appendChild(emptyNotif);
-    } else {
-        games.forEach((game) => {
-            let card = document.createElement("div");
-            card.className = "game-card";
-            card.dataset.gameId = game.id
-            card.innerHTML = `
-                <div class="game-content">
-                    <h3 class="game-title">${game?.title}</h3>
-                    <p class="game-genre">${game?.genre}</p>
-                    <div class="game-meta">
-                        <span class="hours">${icons.clock} ${game?.hoursPlayed}</span>
-                        <span class="rating">${icons.star} ${game?.rating} / 10</span>
-                    </div>
-                    <span class="badge ${game?.completed ? "badge-success" : "badge-pending"}">
-                        ${game?.completed ? `${icons.check} Completed` : "Not completed"}
-                    </span>
-                    <div class="game-actions">
-                        <button class="btn btn-primary btn-edit">${icons.edit} Edit</button>
-                        <button class="btn btn-danger">${icons.trash} Delete</button>
-                    </div>
-                </div>
-            `
-            cardsCont.appendChild(card);
-        });
-    }
-
-}
-
-function renderStatistics() {
-    const statCont = document.querySelector(".stats-grid");
-
-    statCont.innerHTML = "";
-
-    const stats = getGamesStatistics();
-    const statsConfig = {
-        totalGamesCount: {
-            label: "Total games",
-            icon: icons.gamepad,
-            iconClass: "stat-icon-games",
-        },
-        totalCompletedGamesCount:{
-            label: "Completed",
-            icon: icons.check,
-            iconClass: "stat-icon-completed",
-        },
-        totalHoursPlayed: {
-            label: "Total hours",
-            icon: icons.clock,
-            iconClass: "stat-icon-hours"
-        },
-        avgGamesRating: {
-            label: "Average rating",
-            icon: icons.star,
-            iconClass: "stat-icon-rating"
-        },
-    }
-
-    Object.keys(statsConfig).forEach((stat)=>{
-        let card = document.createElement("div");
-        card.className="stat-card";
-        card.innerHTML=`
-            <div class="stat-icon ${statsConfig[stat].iconClass}">
-                ${statsConfig[stat].icon}
-            </div>
-            <div class="stat-content">
-                <h2 class="stat-label">${statsConfig[stat].label}</h2>
-                <p class="stat-value">${stats[stat]}</p>
-            </div>
-        `
-        statCont.appendChild(card);
-    })
-}
-
-function renderIcons() {
-    const iconsEl = document.querySelectorAll('.icon-wrap');
-    iconsEl.forEach((icon)=>{
-        icon.innerHTML = `
-            ${icons[icon.getAttribute("data-icon")]}
-        `
-    })
-}
-
-
-// filter
-
-let searchFilter = "";
-const searchEl = document.querySelector(".search-input");
-
-let genresFilter = "allGenres";
-const genresEl = document.querySelector(".select-genres"); 
-
-let sortFilters = "Name";
-const sortEl = document.querySelector(".select-sort");
-
-let completionFilter = "allGames";
-const completionEl = document.querySelector(".select-completion");
-
-function renderGenresFilters() {
+export function renderGenresFilters() {
     const genresGroup = groupGamesByGenre();
     const genres = genresGroup ? Object.keys(genresGroup) : [];
     genresEl.innerHTML = `<option value="allGenres">All Genres</option>`; 
@@ -188,6 +94,18 @@ function renderGenresFilters() {
         genresEl.value = genresFilter;
     }
 }
+
+
+
+// filter
+
+let searchFilter = "";
+
+let genresFilter = "allGenres";
+
+let sortFilters = "Name";
+
+let completionFilter = "allGames";
 
 
 function setSearchFilter(e) {
@@ -262,35 +180,27 @@ function deleteGame(id) {
 
 
 // form 
-const formCont = document.querySelector(".game-form-cont");
 
 
 let gameId = null;
 
-const form = document.querySelector('.game-form');
-
 let title = "";
-const titleInput = document.querySelector(".game-input[name='title']");
 const setTitle = (newTitle)=>{title = newTitle};
 titleInput.addEventListener('input', (e)=>setTitle(e.target.value));
 
 let genre = "";
-const genreInput = document.querySelector(".game-input[name='genre']");
 const setGenre = (newGenre)=>{genre = newGenre;};
 genreInput.addEventListener('input', (e)=>setGenre(e.target.value));
 
 let hoursPlayed = 0;
-const hoursPlayedInput = document.querySelector(".game-input[name='hoursPlayed']");
 const setHoursPlayed = (newHoursPlayed)=>{hoursPlayed=Number(newHoursPlayed)};
 hoursPlayedInput.addEventListener('input', (e)=>setHoursPlayed(e.target.value));
 
 let completed = false;
-const completedCheckbox = document.querySelector(".game-input[name='completed']");
 const setCompleted = (newCompleted)=>{completed = newCompleted;}
 completedCheckbox.addEventListener('change', (e)=>setCompleted(e.target.checked));
 
 let rating = 0;
-const ratingInput = document.querySelector(".game-input[name='rating']");
 const setRating = (newRating)=>{rating = Number(newRating)}
 ratingInput.addEventListener('input', (e)=>setRating(e.target.value));
 
@@ -330,7 +240,6 @@ function formValidation() {
 
 }
 
-const errorMsgEl = document.querySelector(".form-error");
 
 function formChoice(e) {
     if (gameId !== null) {
@@ -476,7 +385,6 @@ function actionsWithGameCard(e) {
         toggleGameCompletion(cardGameId);
     }
 }
-const addBtnEl = document.querySelector(".btn-add");
 
 function addBtnEvent() {
     setToDefault();
