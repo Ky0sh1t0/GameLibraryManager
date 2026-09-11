@@ -1,4 +1,4 @@
-import { addGameIfNotDuplicate, addGamesToPool, deleteGameFromPool, findGameById, gamesPool, getGamesStatistics, groupGamesByGenre, hasDuplicateGameSameId, searchGames, toggleGameCompleted, updateGame } from "./gameControls.js";
+import { addGameIfNotDuplicate, addGamesToPool, deleteGameFromPool, findGameById, gamesPool, hasDuplicateGameSameId, toggleGameCompleted, updateGame } from "./gameControls.js";
 
 import {
     convertGamesToInstances,
@@ -8,7 +8,6 @@ import {
 
 
 import {
-    renderGames,
     renderStatistics,
     renderIcons,
     renderLoading,
@@ -35,6 +34,15 @@ import {
 
     errorMsgEl,
 } from "./dom.js"
+
+import { 
+    setSearchFilter,
+    setGenresFilter, 
+    setCompletionFilter, 
+    setSortFilter, 
+    applyFilter, 
+    renderGenresFilters
+} from "./filter.js";
 
 import Game from "./models/Game.js";
 
@@ -76,100 +84,8 @@ function importGamesFromJSONString(jsonString) {
 
 // Part 4
 
-export function renderGenresFilters() {
-    const genresGroup = groupGamesByGenre();
-    const genres = genresGroup ? Object.keys(genresGroup) : [];
-    genresEl.innerHTML = `<option value="allGenres">All Genres</option>`; 
-    genres.forEach((genre)=>{
-        let genreOpt = document.createElement('option');
-        genreOpt.value = genre;
-        genreOpt.text = genre;
-        genresEl.appendChild(genreOpt);
-    })
-
-    if (genres.includes(genresFilter)) {
-        genresEl.value = genresFilter;
-    } else {
-        genresFilter = "allGenres";
-        genresEl.value = genresFilter;
-    }
-}
-
-
 
 // filter
-
-let searchFilter = "";
-
-let genresFilter = "allGenres";
-
-let sortFilters = "Name";
-
-let completionFilter = "allGames";
-
-
-function setSearchFilter(e) {
-    searchFilter = e.target.value.trim();
-    applyFilter();
-}
-
-function setGenresFilter(e) {
-    genresFilter = e.target.value;
-    applyFilter();
-}
-
-function setSortFilter(e) {
-    sortFilters = e.target.value;
-    applyFilter();
-}
-
-function setCompletionFilter(e) {
-    completionFilter = e.target.value;
-    applyFilter();
-}
-
-function applyFilter() {
-    let filtredGames = [...gamesPool];
-
-    if (searchFilter !== "") {
-        filtredGames = searchGames(searchFilter);
-    }
-    if (genresFilter !== "allGenres") {
-        filtredGames = filtredGames.filter(
-            (game)=>game.genre.toLowerCase() === genresFilter.trim().toLowerCase()
-        );
-    }
-
-    switch(completionFilter) {
-        case "allGames":
-            filtredGames = filtredGames;
-            break;
-        case "completed":
-            filtredGames = filtredGames.filter((game)=>game.completed === true);
-            break;
-        case "notCompleted":
-            filtredGames = filtredGames.filter((game)=>game.completed === false);
-            break;
-    }
-
-    switch(sortFilters) {
-        case "Name": 
-            filtredGames = filtredGames.sort((game1, game2)=>game1.title.localeCompare(game2.title));
-            break;
-        case "Rating":
-            filtredGames = filtredGames.sort((game1, game2)=>game2.rating - game1.rating);
-            break;
-        case "Completion":
-            filtredGames = filtredGames.sort((game1,game2)=>game2.completed - game1.completed);
-            break;
-        case "Hours":
-            filtredGames = filtredGames.sort((game1, game2)=>game2.hoursPlayed - game1.hoursPlayed);
-            break;
-    }
-
-    renderGames(filtredGames);
-}
-
 
 function deleteGame(id) {
     deleteGameFromPool(id);
@@ -177,33 +93,6 @@ function deleteGame(id) {
     renderGenresFilters();
     applyFilter();
 }
-
-
-// form 
-
-
-let gameId = null;
-
-let title = "";
-const setTitle = (newTitle)=>{title = newTitle};
-titleInput.addEventListener('input', (e)=>setTitle(e.target.value));
-
-let genre = "";
-const setGenre = (newGenre)=>{genre = newGenre;};
-genreInput.addEventListener('input', (e)=>setGenre(e.target.value));
-
-let hoursPlayed = 0;
-const setHoursPlayed = (newHoursPlayed)=>{hoursPlayed=Number(newHoursPlayed)};
-hoursPlayedInput.addEventListener('input', (e)=>setHoursPlayed(e.target.value));
-
-let completed = false;
-const setCompleted = (newCompleted)=>{completed = newCompleted;}
-completedCheckbox.addEventListener('change', (e)=>setCompleted(e.target.checked));
-
-let rating = 0;
-const setRating = (newRating)=>{rating = Number(newRating)}
-ratingInput.addEventListener('input', (e)=>setRating(e.target.value));
-
 
 function exitModalWindow(e) {
     if (e.target.classList.contains("game-form-cont")) {
@@ -215,6 +104,28 @@ function exitModalWindow(e) {
 function toggleForm() {
     formCont.classList.toggle("is-open");
 }
+
+
+// form 
+
+
+let gameId = null;
+
+let title = "";
+const setTitle = (newTitle)=>{title = newTitle};
+
+let genre = "";
+const setGenre = (newGenre)=>{genre = newGenre;};
+
+let hoursPlayed = 0;
+const setHoursPlayed = (newHoursPlayed)=>{hoursPlayed=Number(newHoursPlayed)};
+
+let completed = false;
+const setCompleted = (newCompleted)=>{completed = newCompleted;}
+
+let rating = 0;
+const setRating = (newRating)=>{rating = Number(newRating)}
+
 
 
 function formValidation() {
@@ -405,6 +316,13 @@ function bindEvents() {
     cardsCont.addEventListener('click', actionsWithGameCard);
     addBtnEl.addEventListener("click", addBtnEvent);
     form.addEventListener("submit", formChoice);
+
+    //form inputs
+    titleInput.addEventListener('input', (e)=>setTitle(e.target.value));
+    genreInput.addEventListener('input', (e)=>setGenre(e.target.value));
+    hoursPlayedInput.addEventListener('input', (e)=>setHoursPlayed(e.target.value));
+    completedCheckbox.addEventListener('change', (e)=>setCompleted(e.target.checked));
+    ratingInput.addEventListener('input', (e)=>setRating(e.target.value));
 }
 
 async function initialiseApp() {
