@@ -56,3 +56,14 @@ GameLibraryManager/
 - Statistics
 - localStorage persistence
 - Loading / error / empty states
+
+
+## How to use
+
+### RU
+
+Нужно запустить локальный HTTP server 
+
+### 
+
+Need to setup local HTTP server
