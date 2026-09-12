@@ -1,13 +1,13 @@
 import { gamesPool, getGamesStatistics } from "./gameControls.js";
 import { icons } from "./icons.js";
-import { cardsCont, gamesCount, statCont, iconsEl } from "./dom.js";
+import { cardsCont, gamesCount, statCont, iconsEl, cardTemplate } from "./dom.js";
 
 // card render
 export function renderGames(games) {
 
     gamesCount.innerText = `${games.length}`
-
-    cardsCont.innerHTML = "";
+        
+    cardsCont.replaceChildren();
 
     let emptyNotif = document.createElement("div");
     if (gamesPool.length === 0) {
@@ -20,26 +20,37 @@ export function renderGames(games) {
         cardsCont.appendChild(emptyNotif);
     } else {
         games.forEach((game) => {
-            let card = document.createElement("div");
-            card.className = "game-card";
-            card.dataset.gameId = game.id
-            card.innerHTML = `
-                <div class="game-content">
-                    <h3 class="game-title">${game?.title}</h3>
-                    <p class="game-genre">${game?.genre}</p>
-                    <div class="game-meta">
-                        <span class="hours">${icons.clock} ${game?.hoursPlayed}</span>
-                        <span class="rating">${icons.star} ${game?.rating} / 10</span>
-                    </div>
-                    <span class="badge ${game?.completed ? "badge-success" : "badge-pending"}">
-                        ${game?.completed ? `${icons.check} Completed` : "Not completed"}
-                    </span>
-                    <div class="game-actions">
-                        <button class="btn btn-primary btn-edit">${icons.edit} Edit</button>
-                        <button class="btn btn-danger">${icons.trash} Delete</button>
-                    </div>
-                </div>
-            `
+            const card = cardTemplate.content.firstElementChild.cloneNode(true);
+            card.dataset.gameId = game.id;
+            
+            // card html data
+            const title = card.querySelector(".game-title"); 
+            const genre = card.querySelector(".game-genre");
+            const hours = card.querySelector(".game-meta .hours");
+            const rating = card.querySelector(".game-meta .rating");
+            const badge = card.querySelector(".badge");
+            const btnEdit = card.querySelector(".btn-edit");
+            const btnDel = card.querySelector(".btn-danger");
+
+            // card fields
+            
+            title.textContent = game.title;
+            genre.textContent = game.genre;
+            
+            hours.innerHTML = icons.clock;
+            const hoursText = document.createTextNode(` ${game.hoursPlayed}`);
+            hours.append(hoursText);
+            
+            rating.innerHTML = icons.star;
+            const ratingText = document.createTextNode(` ${game.rating} / 10`);
+            rating.append(ratingText);            
+
+            badge.classList.add(game.completed ? "badge-success" : "badge-pending")
+            badge.innerHTML = game.completed ? `${icons.check} Completed` : "Not completed";           
+
+            btnEdit.innerHTML = `${icons.edit} Edit`;
+            btnDel.innerHTML = `${icons.trash} Delete`;
+
             cardsCont.appendChild(card);
         });
     }
@@ -48,7 +59,7 @@ export function renderGames(games) {
 
 export function renderStatistics() {
 
-    statCont.innerHTML = "";
+    statCont.replaceChildren();
 
     const stats = getGamesStatistics();
     const statsConfig = {
@@ -108,9 +119,9 @@ export function renderLoading() {
 }
 
 export function renderError(err) {
-    cardsCont.innerHTML = `
-        <div class="error-message">
-            ${err.message}
-        </div>
-    `
+    cardsCont.replaceChildren();
+    const errorEl = document.createElement("div");
+    errorEl.className = "error-message";
+    errorEl.textContent = err.message;
+    cardsCont.append(errorEl);
 }

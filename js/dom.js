@@ -1,4 +1,5 @@
 // games & others
+export const cardTemplate = document.querySelector("#card-template");
 export const cardsCont = document.querySelector(".games-grid");
 export const gamesCount = document.querySelector(".games-count span");
 export const statCont = document.querySelector(".stats-grid");

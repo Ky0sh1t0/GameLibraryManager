@@ -8,7 +8,7 @@ import {
 import { 
     gamesPool,
     groupGamesByGenre, 
-    searchGames 
+    searchGames, 
 } from "./gameControls.js";
 
 import {
@@ -23,7 +23,7 @@ let completionFilter = "allGames";
 
 
 function setSearchFilter(e) {
-    searchFilter = e.target.value.trim();
+    searchFilter = e.target.value.trim().toLowerCase();
     applyFilter();
 }
 
@@ -68,7 +68,7 @@ export function applyFilter() {
     let filteredGames = [...gamesPool];
 
     if (searchFilter !== "") {
-        filteredGames = searchGames(searchFilter);
+        filteredGames = searchGames(searchFilter, filteredGames);
     }
     if (genresFilter !== "allGenres") {
         filteredGames = filteredGames.filter(
@@ -78,7 +78,6 @@ export function applyFilter() {
 
     switch(completionFilter) {
         case "allGames":
-            filteredGames = filteredGames;
             break;
         case "completed":
             filteredGames = filteredGames.filter((game)=>game.completed === true);

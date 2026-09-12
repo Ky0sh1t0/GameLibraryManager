@@ -74,8 +74,8 @@ export function getHighestRatedGame() {
     return gamesPool.length !== 0 ? gamesPool.reduce((acc, game)=> acc.rating < game.rating ? game : acc) : null;
 }
 
-export function searchGames(query) {
-    return gamesPool.filter((game)=> game.title.toLowerCase().includes(query.toLowerCase()));
+export function searchGames(query, games) {
+    return games.filter((game)=> game.title.toLowerCase().includes(query));
 }
 
 export function sortGamesByRating() {

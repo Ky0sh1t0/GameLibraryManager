@@ -1,5 +1,5 @@
-import { applyFilter, renderGenresFilters } from "./filter";
-import { renderStatistics } from "./gameRender";
+import { applyFilter, renderGenresFilters } from "./filter.js";
+import { renderStatistics } from "./gameRender.js";
 
 export function refreshFullUI() {
     renderGenresFilters();
