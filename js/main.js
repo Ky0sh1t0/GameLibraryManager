@@ -1,25 +1,23 @@
 import { 
     addGamesToPool,
-    gamesPool, 
 } from "./gameControls.js";
 
 import {
-    convertGamesToInstances,
     loadGamesFromJSON,
-    validateGamesData,
 } from "./services/gameService.js"
 
+import {
+    loadFromLocalStorage,
+    saveToLocalStorage,
+} from "./services/storageService.js"
 
 import {
-    renderStatistics,
     renderIcons,
     renderLoading,
     renderError,
 } from "./gameRender.js";
 
 import { 
-    applyFilter, 
-    renderGenresFilters,
     bindFilterEvents,
 } from "./filter.js";
 
@@ -30,43 +28,19 @@ import {
 import {
     bindGameCardActions,
 } from "./gameActions.js"
+import { 
+    refreshFullUI 
+} from "./refreshUI.js";
 
 
 // data
 async function loadGamesIntoPool() {
-    const games = await loadGamesFromJSON();
-    addGamesToPool(...games);
-}
-
-async function reloadGames(loader) {
-    const games = await loader();
-    replaceGames(games);
-}
-
-function replaceGames(games) {
-    gamesPool.splice(0, gamesPool.length);
-    addGamesToPool(...games);
-}
-
-function saveGamesToJSON() {
-    return JSON.stringify(gamesPool);
-}
-
-function loadGamesFromJSONString(jsonString) {
-    try {
-        const games = JSON.parse(jsonString);
-        validateGamesData(games)
-        const converted = convertGamesToInstances(games)
-        return converted;
-    } catch (error) {
-        console.log(error);
-        throw error        
+    let games = loadFromLocalStorage();
+    if (games === null) {
+        games = await loadGamesFromJSON();
+        saveToLocalStorage(games);
     }
-}
-
-function importGamesFromJSONString(jsonString) {
-    const games = loadGamesFromJSONString(jsonString);
-    replaceGames(games);
+    addGamesToPool(...games);
 }
 
 // Events and initialise
@@ -84,10 +58,8 @@ async function initialiseApp() {
     try {
         await loadGamesIntoPool();  
         bindEvents();
-        renderGenresFilters();
-        renderStatistics();
+        refreshFullUI();
         renderIcons();
-        applyFilter();
     } catch (error) {
         renderError(error);
     }

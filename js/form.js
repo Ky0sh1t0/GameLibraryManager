@@ -9,15 +9,6 @@ import {
 } from "./gameControls.js"
 
 import {
-    renderStatistics
-} from "./gameRender.js"
-
-import {
-    renderGenresFilters,
-    applyFilter,
-} from "./filter.js"
-
-import {
     formCont,
     addBtnEl,
     errorMsgEl, 
@@ -28,6 +19,13 @@ import {
     completedCheckbox,
     ratingInput 
 } from "./dom.js"
+import { 
+    saveToLocalStorage 
+} from "./services/storageService.js";
+
+import { 
+    refreshFullUI 
+} from "./refreshUI.js";
 
 
 // variables
@@ -99,10 +97,10 @@ function addGame(e) {
             throw new Error("The game already exist");
         }
 
+        saveToLocalStorage(gamesPool);
         setToDefault();
-        renderGenresFilters();
-        renderStatistics();
-        applyFilter();
+        refreshFullUI();
+
         toggleForm();
     } catch (error) {
         errorMsgEl.classList.remove("none");
@@ -131,11 +129,10 @@ function formEdit(e) {
             rating: rating,
         })
 
+        saveToLocalStorage(gamesPool);
         toggleForm();
-        renderGenresFilters();
-        renderStatistics();
-        applyFilter();
-    
+        refreshFullUI();
+
         setToDefault();
     } catch (error) {
         errorMsgEl.classList.remove("none");

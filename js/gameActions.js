@@ -1,16 +1,8 @@
 import {
     deleteGameFromPool,
+    gamesPool,
     toggleGameCompleted,
 } from "./gameControls.js"
-
-import {
-    renderStatistics,
-} from "./gameRender.js"
-
-import {
-    renderGenresFilters,
-    applyFilter,
-} from "./filter.js"
 
 import {
     cardsCont,
@@ -19,19 +11,26 @@ import {
 import {
     editGame,
 } from "./form.js"
+import { 
+    saveToLocalStorage 
+} from "./services/storageService.js"
+
+import {
+    refreshFullUI, 
+    refreshSomeUI 
+} from "./refreshUI.js"
 
 function deleteGame(id) {
     deleteGameFromPool(id);
-    renderStatistics();
-    renderGenresFilters();
-    applyFilter();
+    saveToLocalStorage(gamesPool);
+    refreshFullUI();
 }
 
 
 function toggleGameCompletion(gameId) {
     toggleGameCompleted(gameId);
-    renderStatistics();
-    applyFilter();
+    saveToLocalStorage(gamesPool);
+    refreshSomeUI();
 }
 
 function actionsWithGameCard(e) {
