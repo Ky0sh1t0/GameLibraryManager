@@ -62,8 +62,8 @@ GameLibraryManager/
 
 ### RU
 
-Нужно запустить локальный HTTP server 
+Нужно запустить локальный HTTP server или по ссылке - https://ky0sh1t0.github.io/GameLibraryManager/
 
-### 
+### ENG
 
-Need to setup local HTTP server
+Need to setup local HTTP server or with url - https://ky0sh1t0.github.io/GameLibraryManager/
