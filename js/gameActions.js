@@ -17,7 +17,7 @@ import {
 
 import {
     refreshFullUI, 
-    refreshSomeUI 
+    refreshGameAndState 
 } from "./refreshUI.js"
 
 function deleteGame(id) {
@@ -30,10 +30,10 @@ function deleteGame(id) {
 function toggleGameCompletion(gameId) {
     toggleGameCompleted(gameId);
     saveToLocalStorage(gamesPool);
-    refreshSomeUI();
+    refreshGameAndState();
 }
 
-function actionsWithGameCard(e) {
+function handleGameCardAction(e) {
     const deleteBtn = e.target.closest(".btn-danger");
     const editBtn = e.target.closest(".btn-edit");
     const completeBtn = e.target.closest(".badge");
@@ -47,7 +47,7 @@ function actionsWithGameCard(e) {
         return ;
     }
 
-    let cardGameId = Number(card.dataset.gameId);
+    const cardGameId = Number(card.dataset.gameId);
 
     if (deleteBtn) {
         deleteGame(cardGameId);
@@ -60,5 +60,5 @@ function actionsWithGameCard(e) {
 
 
 export function bindGameCardActions() {
-    cardsCont.addEventListener('click', actionsWithGameCard);
+    cardsCont.addEventListener('click', handleGameCardAction);
 }

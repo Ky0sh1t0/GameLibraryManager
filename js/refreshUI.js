@@ -7,7 +7,7 @@ export function refreshFullUI() {
     applyFilter();
 }
 
-export function refreshSomeUI() {
+export function refreshGameAndState() {
     renderStatistics();
     applyFilter();
 }

@@ -4,7 +4,7 @@ import {
     gamesPool,
     updateGame,
     addGameIfNotDuplicate,
-    hasDuplicateGameSameId,
+    hasDuplicateGameSameTitle,
     findGameById,
 } from "./gameControls.js"
 
@@ -71,6 +71,11 @@ function formValidation() {
 
 }
 
+function normalizeStates() {
+    title = title.trim();
+    genre = genre.trim();
+}
+
 // form events
 
 function addGame(e) {
@@ -81,6 +86,8 @@ function addGame(e) {
     
         formValidation();
 
+        normalizeStates();
+
         const game = new Game(
             newGameId,
             title,
@@ -89,8 +96,6 @@ function addGame(e) {
             completed,
             rating,
         )
-
-
 
         const add = addGameIfNotDuplicate(game);
         if (!add) {
@@ -101,7 +106,7 @@ function addGame(e) {
         setToDefault();
         refreshFullUI();
 
-        toggleForm();
+        closeForm();
     } catch (error) {
         errorMsgEl.classList.remove("none");
         errorMsgEl.textContent = error.message;   
@@ -115,11 +120,14 @@ function formEdit(e) {
     try {
         formValidation();
 
-        const editBool = hasDuplicateGameSameId(gameId,title);
+        normalizeStates();
+
+        const editBool = hasDuplicateGameSameTitle(gameId,title);
 
         if (editBool) {
             throw new Error("The game with that title already exist")
         }
+
 
         updateGame(gameId, {
             title,
@@ -130,7 +138,7 @@ function formEdit(e) {
         })
 
         saveToLocalStorage(gamesPool);
-        toggleForm();
+        closeForm();
         refreshFullUI();
 
         setToDefault();
@@ -157,7 +165,7 @@ function setToDefault() {
     form.reset();
 }
 
-function giveValueForEdit(game) {
+function fillFormForEdit(game) {
     setTitle(game.title);
     setGenre(game.genre);
     setHoursPlayed(game.hoursPlayed)
@@ -172,11 +180,16 @@ function giveValueForEdit(game) {
 }
 
 // bind
-function toggleForm() {
-    formCont.classList.toggle("is-open");
+
+function closeForm() {
+    formCont.classList.remove('is-open');
 }
 
-function formChoice(e) {
+function openForm() {
+    formCont.classList.add('is-open');
+}
+
+function handleFormSubmit(e) {
     if (gameId !== null) {
         formEdit(e);
     } else {
@@ -184,18 +197,17 @@ function formChoice(e) {
     }
 }
 
-function exitModalWindow(e) {
+function handleBackdropClick(e) {
     if (e.target.classList.contains("game-form-cont")) {
         setToDefault();
-        toggleForm();
+        closeForm();
     }
 }
 
-function addBtnEvent() {
+function openAddForm() {
     setToDefault();
-    toggleForm();
+    openForm();
 }
-
 
 // public
 export function editGame(id) {
@@ -204,19 +216,19 @@ export function editGame(id) {
         return ;
     }
 
-    toggleForm();
     gameId = id;
-    giveValueForEdit(game);
+    fillFormForEdit(game);
+    openForm();
 }
 
 
 export function bindFormEvents() {
     // modal
-    formCont.addEventListener("click", exitModalWindow);
+    formCont.addEventListener("click", handleBackdropClick);
     
     // form
-    addBtnEl.addEventListener("click", addBtnEvent);
-    form.addEventListener("submit", formChoice);
+    addBtnEl.addEventListener("click", openAddForm);
+    form.addEventListener("submit", handleFormSubmit);
 
     //form inputs
     titleInput.addEventListener('input', (e)=>setTitle(e.target.value));

@@ -1,20 +1,15 @@
 import Game from "../models/Game.js";
 
 export async function loadGamesFromJSON() {
-    try {
-        const res = await fetch("./data/games.json");
-        if (!res.ok) {
-            throw new Error(`Failed to load games. Please try again`)
-        }
-
-        const data = await res.json();
-        validateGamesData(data);
-        const convertedData = convertGamesToInstances(data);
-        return convertedData;
-    } catch (error) {
-        console.log(error);
-        throw error
+    const res = await fetch("./data/games.json");
+    if (!res.ok) {
+        throw new Error(`Failed to load games. Please try again`)
     }
+
+    const data = await res.json();
+    validateGamesData(data);
+    const convertedData = convertGamesToInstances(data);
+    return convertedData;
 }
 
 export function convertGamesToInstances(data) {
@@ -54,7 +49,7 @@ export function validateGamesData(data) {
         if (typeof game.completed !== "boolean") {
             throw new Error(`Unexpected completed`)
         }
-        if (typeof game.title !== "string" || typeof game.genre !== "string") {
+        if ((typeof game.title !== "string" || typeof game.genre !== "string" ) && (game.title.trim() !== "" || game.genre.trim() !== "")) {
             throw new Error(`Unexpected title or genre`)
         }
 

@@ -5,7 +5,7 @@ import { cardsCont, gamesCount, statCont, iconsEl, cardTemplate } from "./dom.js
 // card render
 export function renderGames(games) {
 
-    gamesCount.innerText = `${games.length}`
+    gamesCount.textContent = `${games.length}`
         
     cardsCont.replaceChildren();
 
@@ -86,7 +86,7 @@ export function renderStatistics() {
     }
 
     Object.keys(statsConfig).forEach((stat)=>{
-        let card = document.createElement("div");
+        const card = document.createElement("div");
         card.className="stat-card";
         card.innerHTML=`
             <div class="stat-icon ${statsConfig[stat].iconClass}">
@@ -103,15 +103,13 @@ export function renderStatistics() {
 
 export function renderIcons() {
     iconsEl.forEach((icon)=>{
-        icon.innerHTML = `
-            ${icons[icon.getAttribute("data-icon")]}
-        `
+        icon.innerHTML = icons[icon.getAttribute("data-icon")]
     })
 }
 
 // state render
 export function renderLoading() {
-    cardsCont.innerHTML = "";
+    cardsCont.replaceChildren();
     const loadingEl = document.createElement("div");
     loadingEl.className = "loading-state";
     loadingEl.textContent = "Loading games..."

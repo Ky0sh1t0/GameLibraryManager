@@ -89,16 +89,16 @@ export function applyFilter() {
 
     switch(sortFilters) {
         case "Name": 
-            filteredGames = filteredGames.sort((game1, game2)=>game1.title.localeCompare(game2.title));
+            filteredGames.sort((game1, game2)=>game1.title.localeCompare(game2.title));
             break;
         case "Rating":
-            filteredGames = filteredGames.sort((game1, game2)=>game2.rating - game1.rating);
+            filteredGames.sort((game1, game2)=>game2.rating - game1.rating);
             break;
         case "Completion":
-            filteredGames = filteredGames.sort((game1,game2)=>game2.completed - game1.completed);
+            filteredGames.sort((game1,game2)=>game2.completed - game1.completed);
             break;
         case "Hours":
-            filteredGames = filteredGames.sort((game1, game2)=>game2.hoursPlayed - game1.hoursPlayed);
+            filteredGames.sort((game1, game2)=>game2.hoursPlayed - game1.hoursPlayed);
             break;
     }
 

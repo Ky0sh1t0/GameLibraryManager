@@ -56,10 +56,10 @@ async function initialiseApp() {
     
     
     try {
+        renderIcons();
         await loadGamesIntoPool();  
         bindEvents();
         refreshFullUI();
-        renderIcons();
     } catch (error) {
         renderError(error);
     }
